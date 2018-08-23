@@ -47,7 +47,7 @@ f的栈
 ...
 ```
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/3.2.funcall.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/3.2.funcall.png)
 
 这就是Go和C函数调用协议中很重要的一个区别：为了实现多值返回，Go是使用**栈空间**来返回值的。而常见的C语言是通过**寄存器**来返回值的。
 

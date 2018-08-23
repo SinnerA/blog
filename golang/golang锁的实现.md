@@ -15,7 +15,7 @@ tags:
 
 我们可以简单地把程序代码分成两部分：不会导致竞争条件的程序片段和会导致竞争条件的程序片段。**会导致竞争条件的程序片段就叫做临界区**。避免竞争条件只需要阻止多个进程同时读写共享的数据就可以了，也就是保证同时只有一个进程处于临界区内。
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/critical_zone.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/critical_zone.png)
 
 ### 锁的定义
 
@@ -109,7 +109,7 @@ do {
 总所周知，锁是有开销的，但是如果硬件支持的话，锁的开销就是一个CAS，相比之下，锁竞争的开销更大。关于锁竞争慢，可以参考这篇文章：[Locks Aren’t Slow; Lock Contention Is](http://preshing.com/20111118/locks-arent-slow-lock-contention-is/)。简单来说，**频繁的锁竞争会导致CPU中的进程上下文切换，同时还有缓存的失效。**
 
 关于锁的粒度，用下面一张图来表示比较直观：不可过细也不可过糙。
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/lock_granularity.jpg)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/lock_granularity.jpg)
 
 ## golang中的锁
 

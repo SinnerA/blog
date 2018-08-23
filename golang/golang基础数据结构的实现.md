@@ -63,7 +63,7 @@ func main() {
 
 先来定义一个简单的struct类型，名为Point，表示内存中两个相邻的整数。
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/godata1a.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/godata1a.png)
 
 `Point{10,20}`表示一个已初始化的Point类型。对它进行取地址表示一个指向刚刚分配和初始化的Point类型的指针。前者在内存中是两个词，而后者是一个指向两个词的指针。
 
@@ -74,13 +74,13 @@ type Rect1 struct { Min, Max Point }
 type Rect2 struct { Min, Max *Point }
 ```
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/godata1b.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/godata1b.png)
 
 Rect1是一个具有两个Point类型属性的结构体，由在一行的两个Point--四个int代表。Rect2是一个具有两个`*Point`类型属性的结构体，由两个*Point表示。
 
 ## string
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/godata2.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/godata2.png)
 
 （灰色的箭头表示已经实现的但不能直接可见的指针）
 
@@ -125,7 +125,7 @@ Rect1是一个具有两个Point类型属性的结构体，由在一行的两个P
 
 一个slice是一个数组某个部分的引用。在内存中，它是一个包含3个域的结构体：指向slice中第一个元素的指针，slice的长度，以及slice的容量。长度是下标操作的上界，如x[i]中i必须小于长度。**容量是分割操作的上界，注意不是长度**，如x[i:j]中j不能大于容量。
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/godata3.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/godata3.png)
 
 数组的slice并不会实际复制一份数据，它只是创建一个新的数据结构，包含了另外的一个指针，一个长度和一个容量数据。 如同分割一个字符串，分割数组也不涉及复制操作：它只是新建了一个结构来放置一个不同的指针，长度和容量。在例子中，对`[]int{2,3,5,7,11}`求值操作会创建一个包含五个值的数组，并设置x的属性来描述这个数组。分割表达式`x[1:3]`并不分配更多的数据：它只是写了一个新的slice结构的属性来引用相同的存储数据。在例子中，长度为2--只有y[0]和y[1]是有效的索引，但是容量为4--y[0:4]是一个有效的分割表达式。
 
@@ -151,7 +151,7 @@ Go有两个数据结构创建函数：new和make。两者的区别在学习Go语
 
 换种说法，`new` 的作用是初始化一个指向类型的指针 (*T)， make 的作用是为 `slice`, `map` 或者 `channel` 初始化，并且返回引用 T。
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/godata4.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/godata4.png)
 
 ## map
 
@@ -201,7 +201,7 @@ type bmap struct {
 }
 ```
 
-![img](https://github.com/SinnerA/blog/tree/master/illustrations/hashmap.png)
+![img](https://github.com/SinnerA/blog/blob/master/illustrations/hashmap.png)
 
 hashmap 通过一个 bucket 数组实现，所有元素将被 hash 到数组中的 bucket 中，bucket 填满后，将通过一个 overflow 指针来扩展一个 bucket 出来形成链表，也就是解决冲突问题。这也就是一个基本的 hash 表结构，没什么新奇的东西，下面总结一些细节吧。
 
