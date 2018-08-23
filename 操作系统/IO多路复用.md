@@ -35,7 +35,7 @@ Linux实现多路复用的系统调用主要有select、poll和epoll，可以监
 
 对于socket，我们都很熟悉，就是网络编程中的常见的套接字。那么，sock又是什么呢？其实，在内核源码中，socket和sock都是一个struct，包含了网络相关的一些信息（sock侧重网络部分，socket侧重文件部分，因为Unix中万事皆文件）
 
-![image-20180425001111771](https://github.com/SinnerA/blog/tree/master/illustrations/image-20180425001111771.png)
+![image-20180425001111771](https://github.com/SinnerA/blog/blob/master/illustrations/image-20180425001111771.png)
 
 在介绍select、poll、epoll前，有必要先了解下Linux内核（>=2.6）的事件等待和唤醒机制，这是IO多路复用机制存在的本质。Linux通过socket的sleep_list来管理所有等待该socket某个事件的process，事件发生后，通过wakeup机制来异步唤醒sleep_list上的每个节点，顺序遍历sleep_list的每个节点，并调用各自的callback函数，如果遇到节点是_排他节点_，就终止遍历。
 

@@ -10,7 +10,7 @@ tags: Linux内核 IO管理
 
 由于单一盘片容量有限，一般硬盘都有两张以上的盘片，每个盘片有两面，都可记录信息，所以一张盘片对应着两个磁头。盘片被分为许多扇形的区域，每个区域叫一个**扇区**，硬盘中每个扇区的大小固定为**512字节**。盘片表面上以盘片中心为圆心，不同半径的同心圆称为**磁道**，不同盘片相同半径的磁道所组成的圆柱称为**柱面**。
 
-![disk](https://github.com/SinnerA/blog/tree/master/illustrations/disk.png)
+![disk](https://github.com/SinnerA/blog/blob/master/illustrations/disk.png)
 
 早期的硬盘为了更好的读取数据，每磁道扇区数相同，外圈的记录密度就要比内圈小，会浪费大量的存储空间。
 
@@ -58,7 +58,7 @@ IOPS（Input/Output Per Second）即即**每秒处理的I/O请求数量**。可�
 
 下图显示了Linux系统中对于磁盘的一次读请求在核心空间中所要经历的层次模型：
 
-![image-20180603132847974](https://github.com/SinnerA/blog/tree/master/illustrations/io_layer.png)
+![image-20180603132847974](https://github.com/SinnerA/blog/blob/master/illustrations/io_layer.png)
 
 从图中看出，对于磁盘的一次读请求，依次要经过：
 
@@ -132,7 +132,7 @@ Linux中，文件Cache分为两个层面：**Page Cache和Buffer Cache**，每�
 
 通用块层是粘合所有上层和底层的部分，一个页的磁盘数据布局如下图所示：
 
-![页内磁盘数据布局](https://github.com/SinnerA/blog/tree/master/illustrations/general block layer.png)
+![页内磁盘数据布局](https://github.com/SinnerA/blog/blob/master/illustrations/general block layer.png)
 
 ### IO调度层
 
@@ -192,7 +192,7 @@ Linux通过Cache以及排序合并I/O请求来提高系统的性能，其本质�
 
   为了进一步提高查找效率，Kafka为每个分段后的数据建立了索引文件，并通过索引文件稀疏存储来降低元数据占用大小。一个段中数据对应结构如下图所示：
 
-  ![kafka中一个段的物理结构](https://github.com/SinnerA/blog/tree/master/illustrations/kafka_segment.png)
+  ![kafka中一个段的物理结构](https://github.com/SinnerA/blog/blob/master/illustrations/kafka_segment.png)
 
 
 
@@ -236,7 +236,7 @@ Linux通过Cache以及排序合并I/O请求来提高系统的性能，其本质�
 
 淘宝的TFS就采用了小文件合并存储的策略。TFS中默认Block大小为64M，每个块中会存储许多不同的小文件，但是这个块只占用一个Inode。在TFS中，文件名中包含了Block ID和File ID，通过Block ID定位到具体的DataServer上，然后DataServer会根据本地记录的信息来得到File ID所在Block的偏移量，从而读取到正确的文件内容。TFS一次读过程如下图所示：
 
-![tfs_read](https://github.com/SinnerA/blog/tree/master/illustrations/tfs_read.png)
+![tfs_read](https://github.com/SinnerA/blog/blob/master/illustrations/tfs_read.png)
 
 #### 元数据优化
 
@@ -252,7 +252,7 @@ Linux通过Cache以及排序合并I/O请求来提高系统的性能，其本质�
 
 ### 一次read和write过程
 
-![image-20180603161200510](https://github.com/SinnerA/blog/tree/master/illustrations/io_layer2.png)
+![image-20180603161200510](https://github.com/SinnerA/blog/blob/master/illustrations/io_layer2.png)
 
 #### read
 
