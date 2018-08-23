@@ -9,7 +9,7 @@ tags:
 
 ## 底层实现
 
-官方提倡的一个编程信条——“使用通信去共享内存，而不是共享内存去通信”，这里说的”通信去共享内存”的手段就是channel。channel简单来说就是一个并发安全的队列，用Hchan表示：
+官方提倡的一个编程信条——“使用通信去共享内存，而不是共享内存去通信”，这里说的”通信去共享内存”的手段就是channel。channel简单来说就是一个**并发安全的队列**，用Hchan表示：
 
 ```go
 struct    Hchan
@@ -54,7 +54,7 @@ struct SudoG
 
 对于缓存chan来说，缓存数据实际上是紧挨着Hchan结构体分配的。也就是Hchan中的buf指向的地址，是一个数组，大小为make channel指定的缓冲大小。
 
-chan是FIFO的，那是怎么做到的呢？事实上，Hchan中还有两个关键字段recvx和sendx，在它们的配合下就将该数组构成了一个循环数组，就这样利用数组实现了一个**循环队列**。
+chan是FIFO的，那是怎么做到的呢？事实上，Hchan中还有两个关键字段recvx和sendx，在它们的配合下就将该数组构成了一个循环数组，就这样利用数组实现了一个**循环队列**。（sendx和recvx分别为循环队列的head和last，每次从head出，从last进，实现FIFO）
 
 ![img](/Users/sinnera/sinnera.github.io/source/illustrations/channel02.png)
 
@@ -64,7 +64,7 @@ chan是FIFO的，那是怎么做到的呢？事实上，Hchan中还有两个关�
 
 完成写channel操作的函数是`runtime·chansend`，这个函数同时实现了同步/异步写channel，也就是带/不带缓冲的channel的写操作都是在这个函数里实现的。同步写，还是异步写，其实就是判断是否有缓冲区。
 
-1. 加锁，锁住整个channel结构（就是上面的贴图模型）。这里可以看出，锁的粒度不小，channel很多时候不一定有直接对共享变量加锁效率高。
+1. 加锁，**锁住整个channel结构**（就是上面的贴图模型）。这里可以看出，锁的粒度不小，channel很多时候不一定有直接对共享变量加锁效率高。
 2. 判断是否带缓冲区，如果有就做异步写，没有就做同步写。
 3. **同步写**，判断recvq中是否存在等待的goroutine：
    - 存在，那么就从recvq等待队列里取出一个等待的goroutine，然后将要写入的元素直接交给(拷贝)这个goroutine（SudoG的elem域），然后再将这个goroutine给设置为ready状态，就可以开始运行了
@@ -128,13 +128,33 @@ if c.closed != 0 {
 
 ## 关闭channel
 
-close channel的工作除了将 c.closed 设置为1，还会唤醒所有等待在该channel上的goroutine，即recvq和sendq队列上的goroutine，并使其进入 Grunnable 状态。这时sendq不为空的话，会导致panic，因为closed channel不允许写操作。
+close channel的工作除了将 c.closed 设置为1，还会**唤醒所有等待在该channel上的goroutine，即recvq和sendq队列上的goroutine**，并使其进入 Grunnable 状态。这时sendq不为空的话，会导致panic，因为closed channel不允许写操作。
 
-关闭channel时一件很危险的事，没有一个内置函数可以检查一个channel是否已经关闭。但是，就算有一个简单的 `closed(chan T) bool`函数来检查channel是否已经关闭，它的用处还是很有限的，就像内置的`len`函数用来检查缓冲channel中元素数量一样。原因就在于，已经检查过的channel的状态有可能在调用了类似的方法返回之后就修改了，因此返回来的值已经不能够反映刚才检查的channel的当前状态了。
+关闭channel时一件很危险的事，因为没有一个内置函数可以检查一个channel是否已经关闭，如果close已关闭的channel，则会导致panic。但是，就算有一个简单的 `closed(chan T) bool`函数来检查channel是否已经关闭，它的用处还是很有限的，就像内置的`len`函数用来检查缓冲channel中元素数量一样。原因就在于，已经检查过的channel的状态有可能在调用了类似的方法返回之后就修改了，因此返回来的值已经不能够反映刚才检查的channel的当前状态了。简单来说，不能保证原子性。
+
+当然，可以用下面的方式检查是否已关闭，不过会读一次chan，并不存在只检查是否已关闭的方法。
+
+```go
+value, ok := <- channel
+if !ok {
+    // channel was closed
+}
+```
+
+同理，判断channel是否为空，也不能用len()，可以用select：
+
+```go
+select {
+    case x := <-ch:
+        fmt.Printf("Value %d was read.\n", x)
+    default:
+        fmt.Println("No value ready, moving on.")
+}
+```
 
 ### Channel Closing Principle
 
->  不要从接收端关闭channel，也不要关闭有多个并发发送者的channel
+>  不要从接收端（consumer）关闭channel，也不要关闭有多个并发发送者的channel
 
 上面这个原则，可以解释为：
 
@@ -168,7 +188,7 @@ default:
 1. 除 default 外，如果只有一个 case 语句评估通过，那么就执行这个case里的语句；
 2. 除 default 外，如果有多个 case 语句评估通过，那么通过伪随机的方式随机选一个；
 3. 如果 default 外的 case 语句都没有通过评估，那么执行default里的语句；
-4. 如果没有 default，那么代码块会被阻塞，指导有一个 case 通过评估；否则一直阻塞
+4. 如果没有 default，那么代码块会被阻塞，直到有一个 case 通过评估；否则一直阻塞
 
 ### 实现
 

@@ -110,7 +110,7 @@ chunk 的第二个域的3个标记位：
 
 malloc将内存分成了大小不同的chunk，然后通过bins来组织起来，先来看下bin结构：
 
-![bin结构](/Users/sinnera/Desktop/chunk_bins.png) 
+![bin结构](http://7xjnip.com1.z0.glb.clouddn.com/ldw-%E9%80%89%E5%8C%BA_0193.png) 
 
 malloc将相似大小的chunk用双向链表链接起来，这样一个链表被称为一个bin。malloc一共维护了128个bin，并使用一个数组来存储这些bin。
 

@@ -10,7 +10,7 @@ tags:
 
 ## 前言
 
-设计一个内存分配器时ƒƒ，需要考虑到很多因素：
+设计一个内存分配器时，需要考虑到很多因素：
 
 - 分配、回收的速度
 - 多线程下的行为
@@ -124,6 +124,8 @@ span的分配和object的分配类似，不定长的page取整转化为定长pag
 
 现在，整个TCMalloc的结构已经很清晰了，小对象（<=256KB）从ThreadCache中分配Object，大对象（>256KB）从PageHeap中分配Span，其实就是分配Span表示的Object(s)，因此还缺少表示Span到Object的映射的结构，这就是CentralCache。
 
+//TODO：少了一张图，CentralCache的也是跟ThreadCache类似的，有一个size class
+
 ![image-20180422192855475](/Users/sinnera/sinnera.github.io/source/illustrations/image-20180422192855475.png)
 
 ### 整体回顾
@@ -151,6 +153,16 @@ span的分配和object的分配类似，不定长的page取整转化为定长pag
 page到span的映射关系通过radix tree来实现，逻辑上可以把它理解为一个大数组，以page的值作为偏移，就能访问到page所对应的节点。为减少查询radix tree的开销，PageHeap还维护了一个最近最常使用的若干个page到class（span.sizeclass）的对应关系cache。为了保持cache的效率，cache只提供64K个固定坑位，旧的对应关系会被新来的对应关系替换掉。
 
 空闲span的伙伴系统为上层提供span的分配与回收。当需要的span没有空闲时，可以把更大尺寸的span拆小（如果大的span都没有了，则需要重新找kernel分配）；当span回收时，又需要判断相邻的span是否空闲，以便将它们组合。判断相邻span还是要用到radix tree，radix tree就像一个大数组，很容易取到当前span前后相邻的span。
+
+> PageHeap有两个map，pagemap_记录某一内存页对应哪一个span，显然可能多页对应一个span，pagemap_cache_记录某一内存页对应哪一个SizeClass。
+>
+> 在TCMalloc源码分析（一）中有提到过pagemap_所占内存的问题，假设32位系统4GB可用内存，若pagemap_使用数组实现需要占用4MB的内存（假设一页4KB），仿佛还可以接受，但如果是64位系统呢？所以实际上TCMalloc使用了radix-tree树实现了
+>
+> pagemap_（64位系统使用三层radix-tree TCMalloc_PageMap2，32位使用两层 TCMalloc_PageMap3）。
+>
+> radix-tree其实是一棵多叉树，原理是这样：比如三层，会把对应的key的二进制位分成三部分（High，Medium，Low），依次来生成树的三层，最后一层是叶子节点保存key对应的value。
+>
+> [![graph1(1)](https://images0.cnblogs.com/blog/563450/201311/28230731-bee613f8cd9a4850a946cd0f76d474eb.png)](https://images0.cnblogs.com/blog/563450/201311/28230730-49031cf34b7846da8c53e97abeacc5b3.png)
 
 #### 分配和回收流程
 
@@ -314,6 +326,18 @@ func InitPages(classToSize []int) []int {
 ```
 
 这里计算出来的结果，就是每个 size-class 每次申请的 Page 数量，保证12.5%以下的外部碎片。
+
+## 总结
+
+1. 分为三层，ThreadCache、CentralCache、PageHeap，申请时从里层逐步向外层申请
+2. ThreadCache很简单，维护了不同size-class对应的freeList
+3. CentralCache维护span的链表，每个span下面再挂一些由这个span切分出来的object的链表。这样做便于在span内的object是否都已经free的情况下，将span整体回收给PageHeap。每个回收的object都需要找到自己的span，比较耗时，因此弄了个cache，先放到cache里面，拿也是先从cache里面拿
+4. PageHeap维护了两个很重要的东西：page到span的映射关系，和空闲span的伙伴系统。地址值经过地址对齐，很容易知道它属于哪一个page。再通过page到span的映射关系就能知道object应该回收到哪里。当需要的span没有空闲时，伙伴系统可以把更大尺寸的span拆小。
+5. 特色：
+   - 小对象从ThreadCache分配，减少锁竞争
+   - 碎片问题：采用Segregated-Freelis（离散式空闲列表）的算法，按照测试的结果，提前分配好多种size-class，碎片率控制在12.5%以内
+   - 适合于线程数不固定，经常频繁创建退出的场景，因为有ThreadCache
+   - 周期性的垃圾回收则将内存从各个ThreadCache回收到CentralCache
 
 ## 参考
 

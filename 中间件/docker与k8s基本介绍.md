@@ -1,5 +1,5 @@
 ---
-title: k8s基本介绍
+title: docker与k8s基本介绍
 date: 2018-06-26
 tags: k8s docker
 ---
@@ -83,25 +83,25 @@ UnionFS是一种为Linux设计的用于把多个目录合并mount到同一个目
 下面是一个docker.yaml文件：
 
 ```yaml
-from: registry01.lanxin.lfk.360es.cn/library/centos:7.4.1708.qihoo
-name: lanxin-ds-chat
+from: a.b.c.com/library/centos:7.4
+name: 
 addfiles:
     # 支持使用$GOPATH环境变量，或者直接指定二进制程序的路径
-    - $GOPATH/bin/lanxin-ds-chat:/usr/bin
+    - $GOPATH/bin/test:/usr/bin
 ports:
     - 5270
-cmd: lanxin-ds-chat
+cmd: test
 args:
-    - -addr=:5270
+    - -addr=:6789
     - -etcd-addrs=$(ETCD_ADDR)
-    - -qlog-host=$(QLOG_AGENT_ADDR):$(QLOG_AGENT_PORT)
+    - -log=$(LOG_ADDR):$(LOG_PORT)
     - -namespace=$(NAMESPACE)
 
 ```
 
 from：基于一个已有的镜像
 
-addfile：表示将本地编译好的二进制文件 `lanxin-ds-chat` 复制到镜像内`/usr/bin`下
+addfile：表示将本地编译好的二进制文件 `test` 复制到镜像内`/usr/bin`下
 
 cmd：启动应用的命令
 

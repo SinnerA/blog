@@ -461,7 +461,7 @@ goroutine的消亡比较简单，注意在函数newproc1，设置了fnstart为go
 
 goroutine的状态变迁图：
 
-![img](http://tiancaiamao.gitbooks.io/go-internals/content/zh/images/5.2.goroutine_state.jpg?raw=true)
+![img](http://tiancaiamao.gitbooks.io/go-internals/content/zh/images/5.2.goroutine_state.jpg)
 
 ## 关键点
 

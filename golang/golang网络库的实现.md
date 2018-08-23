@@ -15,15 +15,6 @@ tags: Golang 源码
 一个典型的Go server端程序大致如下：
 
 ```go
-后台还有一个poller会不停地进行poll，所有的文件描述符都被添加到了这个poller中的，当某个时刻一个文件描述符准备好了，poller就会唤醒之前因它而阻塞的goroutine，于是goroutine重新运行起来。
-
-这个poller是在后台一直运行的，前面分析系统调度章节时为了简化并没有提起它。其实在proc.c文件中，runtime.main函数的第一行代码就是
-
-newm(sysmon, nil);
-这个意思就是新建一个M并让它运行sysmon函数，前面说过M就是机器的抽象，它会直接开一个物理线程。sysmon里面是个死循环，每睡眠一小会儿就会调用runtime.epoll函数，这个sysmon就是所谓的poller。
-
-poller是一个比gc更高优先级的东西，何以见得呢？首先，垃圾回收只是用runtime.newproc建立出来的，它仅仅是个goroutine任务，而poller是直接用newm建立出来的，它跟startm是平级的。也就相当于gc只是线程池里的任务，而poller自身直接就是worker。然后，gc只是被触发性地发生的，是被动的。而poller却是每隔很短时间就会主动运行。 main
-
 import (
 	"log"
 	"net"
@@ -68,6 +59,7 @@ func echoFunc(c net.Conn) {
 ```go
 func main(){
 	listen()
+    addfd() //set non_block
     for {
         ret = epoll_wait()
         if ret > 0 {
@@ -89,7 +81,7 @@ func echoFunc(){
 }
 ```
 
-两者对比下，看起来类似。但是go是阻塞等待的，传统的是非阻塞直接返回的，这是他们两本质区别。
+两者对比下，看起来类似。但是go是阻塞等待的，传统的是非阻塞直接返回的，这是他们两本质区别。另外，go的使用也非常简单，不需要像传统epoll一样，需要关心：设置成非阻塞IO，读取时候的EAGAIN，ET还是LT等等
 
 ## 实现
 
@@ -197,7 +189,7 @@ for {
 
 上面代码段是从netFD的Read方法中摘取，重点关注这个for循环中的syscall.Read调用的错误处理。当有错误发生的时候，会检查这个错误是否是syscall.EAGAIN，如果是，则调用WaitRead将当前读这个fd的goroutine给park住，直到这个fd上的读事件再次发生为止。
 
-当这个socket上有新数据到来的时候，WaitRead调用返回，继续for循环的执行。这样的实现，就让调用netFD的Read的地方变成了同步“阻塞”方式编程，不再是异步非阻塞的编程方式了。netFD的Write方法和Read的实现原理是一样的，都是在碰到EAGAIN错误的时候将当前goroutine给park住直到socket再次可写为止。
+当这个socket上有新数据到来的时候，WaitRead调用返回，继续for循环的执行。这样的实现，就让调用netFD的Read的地方变成了同步“阻塞”方式编程，不再是同步非阻塞的编程方式了。netFD的Write方法和Read的实现原理是一样的，都是在碰到EAGAIN错误的时候将当前goroutine给park住直到socket再次可写为止。
 
 ### poller
 

@@ -24,7 +24,7 @@ tags: Golang 性能优化
 
 一般来说，只要设计合理的架构和业务模块的分层，基本就决定了性能不会是太大问题，有问题也容易优化和扩展。因此，前期的设计工作非常重要。
 
-IM开发实践中遇到的几个场景：
+开发实践中遇到的几个场景：
 
 1. 每当发出一条群聊消息，需要notify给所有群成员，之前是单个notify，导致吞吐率很低，且压测时CPU占用很高。之后观察得知，因为业务模块与notify模块是RPC调用，序列化和反序列化消耗了大量的CPU。改成批量notify之后，吞吐率提升了一个量级。
 2. redis存储session改成pipeline模式，提高了效率
@@ -93,7 +93,7 @@ IM开发实践中遇到的几个场景：
 
    这种模式可以防止写入阻塞读取。
 
-4. 分割是另一种用于减少共享可变数据结构竞争和阻塞的通用技术。下面是一个展示如何分割哈希表（hashmap）的例子（原本需要锁整个map，变成只锁map中的某个元素，锁粒度降低了）：
+4. 分割是另一种用于减少共享可变数据结构竞争和阻塞的通用技术。下面是一个展示如何分割哈希表（hashmap）的例子：
 
    ```go
    type Partition struct {
@@ -156,7 +156,7 @@ goroutine数量太多也不行，会导致耗尽内存资源，或者CPU使用�
 
 #### 泄露（Leak）
 
-goroutine永远堵塞在 I/O 上（例如 channel 通信），或者陷入死循环，那么 goroutine 会发生泄露，跟内存不一样，泄露的goroutine不会被回收，将占用大量内存，导致系统阻塞。
+goroutine永远堵塞在channel上，或者陷入死循环，那么 goroutine 会发生泄露，跟内存不一样，泄露的goroutine不会被回收，将占用大量内存，导致系统阻塞。
 
 举一个例子：
 
@@ -308,7 +308,7 @@ go consume(ch) {
 举例:
 
 ```bash
--run=XXX 是说只运行 Benchmarks，而不要运行任何 Tests
+//-run=XXX 是说只运行 Benchmarks，而不要运行任何 Tests
 go test -run=XXX -bench=IndexByte -cpuprofile=/tmp/c.p bytes 
 
 //分析生成的性能数据文件，go tool pprof (应用程序)（应用程序的prof文件）

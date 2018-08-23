@@ -18,7 +18,7 @@ tags:
 
 ![img](/Users/sinnera/sinnera.github.io/source/illustrations/v2-eff89f011b2f456f0f11fba2823da3bf_hd.png)
 
-由于多个RPC可能在不同的goroutine里处理，因此问题变成如何通知不同goroutine，这里自然会想到使用channel来通知结束。其实，context的核心就是用一个done chan实现的。
+由于多个RPC可能在不同的goroutine里处理，因此问题变成如何通知不同goroutine，这里自然会想到使用channel来通知结束。其实，**context的核心就是用一个done chan实现的**。
 
 ## 介绍
 
@@ -144,7 +144,7 @@ func WithCancel(parent Context) (ctx Context, cancel CancelFunc) {
 // newCancelCtx returns an initialized cancelCtx.
 func newCancelCtx(parent Context) cancelCtx {
     return cancelCtx{
-        Context: parent,
+        Context: parent, //包含父节点，通过层层包含，实现了树
         done:    make(chan struct{}),
     }
 }
