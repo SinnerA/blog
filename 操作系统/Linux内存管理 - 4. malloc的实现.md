@@ -96,7 +96,7 @@ malloc采用的是内存池的实现方式，先申请一大块内存，然后�
 
 malloc利用chunk结构来管理内存块，malloc就是由不同大小的chunk链表组成的。chunk结构：
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/chunk.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/chunk.png)
 
 chunk中包含一些控制信息，用这样的方法来记录分配的信息，以便完成分配和释放工作。chunk指针指向chunk开始的地方，图中的mem指针才是真正返回给用户的内存指针。
 

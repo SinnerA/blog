@@ -50,13 +50,13 @@ struct SudoG
 };
 ```
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/channel.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/channel.png)
 
 对于缓存chan来说，缓存数据实际上是紧挨着Hchan结构体分配的。也就是Hchan中的buf指向的地址，是一个数组，大小为make channel指定的缓冲大小。
 
 chan是FIFO的，那是怎么做到的呢？事实上，Hchan中还有两个关键字段recvx和sendx，在它们的配合下就将该数组构成了一个循环数组，就这样利用数组实现了一个**循环队列**。（sendx和recvx分别为循环队列的head和last，每次从head出，从last进，实现FIFO）
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/channel02.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/channel02.png)
 
 ## 读写操作
 
@@ -225,7 +225,7 @@ Select中重点关注pollorder、lockorder、scase三个字段：
 - lockorder指针指向的也是一个数组，元素为`Hchan *`类型，存储每个case条件中操作channel
 - pollorder是一个uint16的数组，保存了case执行的顺序
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/select1.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/select1.png)
 
 select执行选择过程:
 

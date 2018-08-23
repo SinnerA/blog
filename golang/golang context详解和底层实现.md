@@ -16,7 +16,7 @@ tags:
 
 理想情况下，应该在RPC 2出错后，通知其他两个RPC停止运行，并返回错误，这样就不会造成资源浪费。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/v2-eff89f011b2f456f0f11fba2823da3bf_hd.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/v2-eff89f011b2f456f0f11fba2823da3bf_hd.png)
 
 由于多个RPC可能在不同的goroutine里处理，因此问题变成如何通知不同goroutine，这里自然会想到使用channel来通知结束。其实，**context的核心就是用一个done chan实现的**。
 

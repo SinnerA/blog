@@ -10,7 +10,7 @@ tags: Linux内核 内存管理
 
 下图给出了硬件、系统、进程三个层面的内存之间的概要关系。
 
-![Linux内存体系](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_01.png)
+![Linux内存体系](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_01.png)
 
 ### 硬件角度
 
@@ -31,7 +31,7 @@ tags: Linux内核 内存管理
 - 用户空间只能访问有限的资源，若需要特殊权限，可以通过系统调陷入内核态，从而可以访问内核空间
 - 所有内核进（线）程共用一个地址空间，而用户进程都有各自的地址空间。
 
-![Linux内核内存与用户内存空间](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_02.png)
+![Linux内核内存与用户内存空间](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_02.png)
 
 ### 进程角度
 
@@ -51,9 +51,9 @@ BSS（.bss）：未初始化的全局和静态变量，以及所有被初始化�
 
 未使用区：分配新内存空间的预备区域。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_03.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_03.png)
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_04.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_04.png)
 
 #### 内核态和用户态
 
@@ -73,7 +73,7 @@ Linux系统对自身进行了划分，一部分核心软件独立于普通应用
 
 但是，不能内核空间不能完全用来线性映射，因为这样内核空间只能访问到1G的物理内存，所以前面896M做线性映射，剩余了128M（高端内存）用于做动态映射，这样才能访问到整个物理内存。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_space.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_space.png)
 
 注：对于64位系统，将拥有16TB的虚拟空间，内核将512G划分为内核空间，如果物理内存小于512G的话，则不存在高端内存，因为只需要线性映射，内核空间就能访问到所有物理内存；物理内存大于512G的话，也需要高端内存做动态映射。
 
@@ -95,7 +95,7 @@ Linux系统对自身进行了划分，一部分核心软件独立于普通应用
 
 **ZONE_HIGHMEM**       896MB ~ 结束
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_05.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_05.png)
 
 #### 理解
 
@@ -103,11 +103,11 @@ Linux系统对自身进行了划分，一部分核心软件独立于普通应用
 
 当内核想访问高于896MB物理地址内存时，从0xF8000000 ~ 0xFFFFFFFF地址空间范围内找一段相应大小空闲的逻辑地址空间，借用一会。借用这段逻辑地址空间，建立映射到想访问的那段物理内存（即填充内核PTE页面表），**临时用一会，用完后归还**。这样别人也可以借用这段地址空间访问其他物理内存，实现了使用有限的地址空间，访问所有所有物理内存。如下图。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_06.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_06.png)
 
 #### 划分
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_07.jpeg)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_07.jpeg)
 
 从图中可以看出，内核采用了三种机制将高端内存映射到内核空间：永久内核映射，固定映射和vmalloc机制。
 
@@ -165,7 +165,7 @@ vmalloc机制使得内核通过连续的线性地址来访问非连续的物理�
 
 分区页框分配器 (zoned page frame allocator) ,处理对**连续页框的内存分配请求**。分区页框管理器分为两大部分:前端的管理区分配器和伙伴系统，如下图：
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_08.jpeg)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_08.jpeg)
 
 管理区分配器负责搜索一个能满足请求页框块大小的管理区。在每个管理区中,具体的页框分配工作由伙伴系统负责。为了达到更好的系统性能,单个页框的申请工作直接通过per-CPU页框高速缓存完成。
 
@@ -173,7 +173,7 @@ vmalloc机制使得内核通过连续的线性地址来访问非连续的物理�
 
 slab 分配器最初是为了**解决物理内存的内部碎片**而提出的，它将内核中常用的数据结构看做对象。slab分配器为每一种对象建立高速缓存。内核对该对象的分配和释放均是在这块高速缓存中操作。一种对象的slab分配器结构图如下：
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/slab_cache.jpeg)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/slab_cache.jpeg)
 
 可以看到每种对象的高速缓存是由若干个slab组成，每个slab是由若干个页框组成的。虽然slab分配器可以分配比单个页框更小的内存块，但它所需的所有内存都是通过伙伴算法分配的。
 
@@ -220,7 +220,7 @@ Linux使用虚拟地址空间（task_struct->mm），大大增加了进程的寻
 
 下图是 32 位系统典型的虚拟地址空间分布（来自《深入理解计算机系统》）
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_09.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_09.png)
 
 ### malloc的实现
 

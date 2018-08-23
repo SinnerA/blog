@@ -8,7 +8,7 @@ tags: Linux
 
 Linux中的进程由task_struct表示，Linux中线程也是由进程实现的，也就是说线程实际上也是一个task_struct。task_struct也被称为**进程描述符**，它包含一个进程运行所需的所有信息，比如进程的id、进程的属性以及构建进程的资源。 
 
-![task_struct](/Users/sinnera/sinnera.github.io/source/illustrations/772759-20170127115856159-530461958.png)
+![task_struct](https://github.com/SinnerA/blog/tree/master/illustrations/772759-20170127115856159-530461958.png)
 
 ## thread_info
 
@@ -61,7 +61,7 @@ union thread_union
 
 进程task_struct中的thread_info（或stack）指针指向了进程的thread_union的地址，在早期的内核中这个指针用`struct thread_info *thread_info`来表示, 但是新的内核中用了一个更浅显的名字`void *stack`，即内核栈。
 
-![thread_info](/Users/sinnera/sinnera.github.io/source/illustrations/thread_info1.png)
+![thread_info](https://github.com/SinnerA/blog/tree/master/illustrations/thread_info1.png)
 
 上面我们知道通过thread_info可以轻松找到task_struct，那一开始怎么找到thread_info呢？答案是通过esp寄存器+偏移量。esp寄存器用来存放内核栈栈顶单元的地址。在80x86系统中，栈起始于顶端，并朝着这个内存区开始的方向增长。从用户态刚切换到内核态以后，进程的内核栈总是空的。因此，esp寄存器指向这个栈的顶端。一旦数据写入堆栈，esp的值就递减。
 

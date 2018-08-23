@@ -82,7 +82,7 @@ Unix/Linux系统中，**目录（directory）也是一种文件，叫做目录�
 
 目录文件的结构非常简单，就是**一系列目录项（dirent）的列表**。每个目录项（也称为FCB），由两部分组成：所包含文件的文件名，以及该文件名对应的inode号码。总而言之，目录文件通过一个个目录项记录了该目录下所有文件的文件名与inode的对应关系。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/inode_table.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/inode_table.png)
 
 ls命令只列出目录文件中的所有文件名：
 
@@ -140,7 +140,7 @@ Linux系统中，把一切都看做是文件，当进程打开现有文件或创
 注：描述符本身不需要存储，就是数组的index
 ```
 
-![File descriptor](/Users/sinnera/sinnera.github.io/source/illustrations/file_descriptor.png)
+![File descriptor](https://github.com/SinnerA/blog/tree/master/illustrations/file_descriptor.png)
 
 - 在进程A中，文件描述符1和30都指向了同一个打开的文件句柄（#23），这可能是该进程多次对执行`打开`操作
 - 进程A中的文件描述符2和进程B的文件描述符2都指向了同一个打开的文件句柄（#73），这种情况有几种可能，1.进程A和进程B可能是父子进程关系;2.进程A和进程B打开了同一个文件，且文件描述符相同（低概率事件=_=）；3.A、B中某个进程通过UNIX域套接字将一个打开的文件描述符传递给另一个进程。
@@ -166,7 +166,7 @@ Linux系统中，把一切都看做是文件，当进程打开现有文件或创
 
 struct file代表一个打开的文件，系统中的每个打开的文件在内核空间都有一个关联的struct file。它由内核在打开文件时创建，并传递给在文件上进行操作的任何函数。在文件的所有实例都关闭后，内核释放这个数据结构。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/file_struct.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/file_struct.png)
 
 上图展示了task_struct与file_struct的关联关系：
 

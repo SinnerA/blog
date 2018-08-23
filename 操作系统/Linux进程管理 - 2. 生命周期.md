@@ -39,7 +39,7 @@ fork 创造的子进程复制了父亲进程的资源（写时复制技术），
 
 **写时复制技术**（Copy-On-Write）：简单来说，写的时候再复制，lazy模式。IO中也用到了这个思想，先写入缓存，关闭文件时才写入磁盘。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/cow.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/cow.png)
 
 #### vfork
 
@@ -122,7 +122,7 @@ CLONE标志
 
 ## 过程图
 
-![process_life_cycle](/Users/sinnera/sinnera.github.io/source/illustrations/process_life_cycle.png)
+![process_life_cycle](https://github.com/SinnerA/blog/tree/master/illustrations/process_life_cycle.png)
 
 ## 参考
 

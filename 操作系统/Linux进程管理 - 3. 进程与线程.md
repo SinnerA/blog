@@ -135,7 +135,7 @@ linuxthreads利用前面提到的轻量级进程来实现线程，但是对于PO
 
 实现简单，LinuxThread与NPTL都是采用这种模型。
 
-![LWP.JPG](/Users/sinnera/sinnera.github.io/source/illustrations/LWP.png)
+![LWP.JPG](https://github.com/SinnerA/blog/tree/master/illustrations/LWP.png)
 
 #### n:1
 
@@ -145,7 +145,7 @@ linuxthreads利用前面提到的轻量级进程来实现线程，但是对于PO
 
 当多线程并发执行时，如果其中一个线程执行IO操作时，内核接管这个操作，如果IO阻塞，用户态的其他线程都会被阻塞，因为这些线程都对应同一个内核调度实体。
 
-![Uthread1.JPG](/Users/sinnera/sinnera.github.io/source/illustrations/Uthread1.png)
+![Uthread1.JPG](https://github.com/SinnerA/blog/tree/master/illustrations/Uthread1.png)
 
 #### m:n
 

@@ -28,7 +28,7 @@ CPU 对内存的寻址最简单的方式就是直接使用物理内存地址，�
 
 虚拟地址寻址（也叫做虚拟寻址）的示意图如下。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/vm_address_02.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/vm_address_02.png)
 
 ### MMU
 
@@ -38,7 +38,7 @@ CPU 将虚拟地址发送给 MMU，然后 MMU 将虚拟地址翻译成物理地�
 
 页表的一种简单表示如下。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/page_table.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/page_table.png)
 
 ### 页表
 
@@ -59,7 +59,7 @@ CPU 将虚拟地址发送给 MMU，然后 MMU 将虚拟地址翻译成物理地�
 
 加入 TLB，整个虚拟地址翻译的过程如下两图所示。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/tlb_hit.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/tlb_hit.png)
 
 ### Page Fault（缺页错误）
 
@@ -139,7 +139,7 @@ Linux下采用的是段页式内存管理，先分段，再分页。但是因为
 
 下图是 32 位系统典型的虚拟地址空间分布，这里逻辑上是连续的，其实物理上并不连续：
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_04.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_04.png)
 
 ### 结构
 
@@ -166,7 +166,7 @@ struct mm_struct
 
 其中的域抽象了进程的地址空间，如下图所示：
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/linux_memory_11.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/linux_memory_11.png)
 
 每个进程都有自己独立的mm_struct，使得每个进程都有一个抽象的平坦的独立的32或64位地址空间，各个进程都在各自的地址空间中相同的地址内存存放不同的数据而且互不干扰。
 
@@ -191,7 +191,7 @@ atomic_t mm_count;                      /* How many references to "struct mm_str
 
 ### vm_area_struct
 
-![task_struct，mm_struct，vm_area_struct](/Users/sinnera/sinnera.github.io/source/illustrations/vma.png)
+![task_struct，mm_struct，vm_area_struct](https://github.com/SinnerA/blog/tree/master/illustrations/vma.png)
 
 tsk->mmap指向了由多个vm_area_struct组成的集合。vm_area_struct是虚存管理的最基本的管理单元，分别表示不同类型的虚拟内存区域。vm_area_struct表示一段连续的虚拟空间，大小为页大小的倍数。
 
@@ -213,7 +213,7 @@ vm_area_struct 的关键 fields:
 
 vm_area_struct集合存储在mm_struct中的一个单向链表和红黑树中。当输出/proc/pid/maps文件时，只需要遍历这个链表即可。红黑树主要是为了通过给定的虚拟地址能够快速定位到某一个内存块，红黑树的根存储在mm_rb域。
 
-![task_struct，mm_struct，vm_area_struct](/Users/sinnera/sinnera.github.io/source/illustrations/vma _02.png)
+![task_struct，mm_struct，vm_area_struct](https://github.com/SinnerA/blog/tree/master/illustrations/vma _02.png)
 
 #### 总结
 
@@ -246,7 +246,7 @@ mmap是一种**内存映射文件**的方法，即将一个**文件或者其它�
 
 > mmap()并不仅仅是说把硬盘空间直接映射为一段内存，而是把某个文件的连续一段映射为一段连续内存。“文件”这个概念可以是设备，可以是某个驱动假造出来的文件，也可以是磁盘文件。
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/mmap.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/mmap.png)
 
 tsk->mmap区域是一堆vma的集合，mmap函数就是要创建一个新的vm_area_struct结构，并将其与文件的物理磁盘地址相连。
 
@@ -309,7 +309,7 @@ tsk->mmap区域是一堆vma的集合，mmap函数就是要创建一个新的vm_a
 
 ## 总体架构图
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/memory_manager.jpg)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/memory_manager.jpg)
 
 ## 参考
 

@@ -31,14 +31,14 @@ Kafka部分名词解释如下：
 
 下图表示一个partition目录下有多个segment file：
 
-![image](/Users/sinnera/sinnera.github.io/source/illustrations/kafka-segment-file-list.png)
+![image](https://github.com/SinnerA/blog/tree/master/illustrations/kafka-segment-file-list.png)
 
 - segment file组成：由2大部分组成，分别为index file和data file，此2个文件一一对应，成对出现，后缀".index"和“.log”分别表示为segment索引文件（元数据）、数据文件
 - segment文件命名规则：partion全局的第一个segment从0开始，后续每个segment文件名为上一个segment文件最后一条消息的offset值。数值最大为64位long大小，19位数字字符长度，没有数字用0填充。
 
 以上图中一对segment file文件为例，说明segment中index file和data file对应关系物理结构如下：
 
-![image](/Users/sinnera/sinnera.github.io/source/illustrations/kafka-segment-index-correspond-data.png)
+![image](https://github.com/SinnerA/blog/tree/master/illustrations/kafka-segment-index-correspond-data.png)
 
 上图中索引文件存储大量元数据，数据文件存储大量消息，索引文件中元数据指向对应数据文件中message的物理偏移地址。
 
@@ -46,7 +46,7 @@ Kafka部分名词解释如下：
 
 segment data file物理结构：
 
-![image](/Users/sinnera/sinnera.github.io/source/illustrations/kafka-segment-message-structure.png)
+![image](https://github.com/SinnerA/blog/tree/master/illustrations/kafka-segment-message-structure.png)
 
 ####通过offset查找message
 

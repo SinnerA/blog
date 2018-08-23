@@ -207,7 +207,7 @@ newm(sysmon, nil);
 
 ## 流程图
 
-![image-20180426233815056](/Users/sinnera/sinnera.github.io/source/illustrations/image-20180426233815056.png)
+![image-20180426233815056](https://github.com/SinnerA/blog/tree/master/illustrations/image-20180426233815056.png)
 
 ## 参考
 

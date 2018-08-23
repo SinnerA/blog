@@ -17,13 +17,13 @@ PCB应该包含：
 
 ## 数据结构
 
-![task_struct](/Users/sinnera/sinnera.github.io/source/illustrations/task_struct.png)
+![task_struct](https://github.com/SinnerA/blog/tree/master/illustrations/task_struct.png)
 
 ### 进程状态
 
 state：进程运行状态
 
-![img](/Users/sinnera/sinnera.github.io/source/illustrations/process_state.png)
+![img](https://github.com/SinnerA/blog/tree/master/illustrations/process_state.png)
 
 ### 进程标识符
 
@@ -36,7 +36,7 @@ state：进程运行状态
 
 thread_info（stack）：指向的内核态的进程栈：thread_info，thread_info也指向task_struct，利用它可以轻易找到task_struct，current宏（找到当前执行进程）就是利用它实现的
 
-![thread_info](/Users/sinnera/sinnera.github.io/source/illustrations/thread_info1.png)
+![thread_info](https://github.com/SinnerA/blog/tree/master/illustrations/thread_info1.png)
 
 **注：在进程切换时，内核栈保存了寄存器信息，用于恢复上下文**
 
@@ -94,7 +94,7 @@ thread_info（stack）：指向的内核态的进程栈：thread_info，thread_i
 
 - tasks：所有进程队列，是一个双向链表，把所有进程串起来了
 
-  ![task_struct.tasks](/Users/sinnera/sinnera.github.io/source/illustrations/task_struct.tasks.png)
+  ![task_struct.tasks](https://github.com/SinnerA/blog/tree/master/illustrations/task_struct.tasks.png)
 
 ## 参考
 

@@ -18,7 +18,7 @@ cgroup实现了对资源的分配控制，当然这需要宿主机的内核支�
 
 ### docker与虚拟机对比
 
-![lark_01_vm_vs_docker](/Users/sinnera/sinnera.github.io/source/illustrations/docker_vs_vm.png)
+![lark_01_vm_vs_docker](https://github.com/SinnerA/blog/tree/master/illustrations/docker_vs_vm.png)
 
 1. 虚拟机运行在虚拟硬件上, 应用运行在虚拟机内核上。而 docker daemon 是宿主机上的一个进程, 应用只是 docker daemon 的一个子进程, 换句话说, 应用直接运行在宿主机内核上。
 2. 虚拟机需要特殊硬件虚拟化技术支持, 因而只能运行在物理机上。docker没有硬件虚拟化, 因而可以运行在物理机、虚拟机, 甚至docker容器内(嵌套运行)。
@@ -74,7 +74,7 @@ UnionFS是一种为Linux设计的用于把多个目录合并mount到同一个目
 
 这种分层结构，能够很方便快速地在原镜像上面重新创建一个新的镜像。
 
-![](/Users/sinnera/sinnera.github.io/source/illustrations/docker_imag.png)
+![](https://github.com/SinnerA/blog/tree/master/illustrations/docker_imag.png)
 
 > 除了aufs，docker还支持btrfs, devicemapper和vfs
 
