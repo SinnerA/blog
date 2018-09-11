@@ -118,3 +118,5 @@ Sofa Mesh在非常早的时间点上就选择开源出来，其实都还不是�
 [剖析 | SOFARPC 框架之总体设计与扩展机制](https://mp.weixin.qq.com/s?__biz=MzUzMzU5Mjc1Nw==&mid=2247484070&idx=1&sn=206f697f0059f3ce8a05751a4a616af1&chksm=faa0ed7ccdd7646a844e783bf9e5cb042ef6bd77620f507910e4882be737172f1e2e50801d78&token=566785343&lang=zh_CN&scene=21#wechat_redirect)
 
 [【剖析 | SOFARPC 框架】系列之链路追踪剖析](https://juejin.im/post/5b7d15d6e51d4538bf55b001)
+
+[关于Service Mesh和Kubernets的最前沿思考|十问蚂蚁金服](https://hk.saowen.com/a/aa80b75324751669d8e9cc5890e5d2129ab8b1590a946666a72f404c8602e2f0)
